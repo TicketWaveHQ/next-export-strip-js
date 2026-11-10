@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+type: software
+title: "next-export-strip-js"
+abstract: >-
+  A command-line tool that removes the Next.js runtime from a static export
+  (output: 'export') when no page needs JavaScript in the browser, and refuses,
+  changing nothing, when the build shows that a page does.
+authors:
+  - name: "TicketWave HQ Ltd"
+version: "0.1.0"
+date-released: "2026-11-10"
+license: MIT
+repository-code: "https://github.com/TicketWaveHQ/next-export-strip-js"
+url: "https://github.com/TicketWaveHQ/next-export-strip-js"
+keywords:
+  - nextjs
+  - static site
+  - static export
+  - web performance
+  - react server components

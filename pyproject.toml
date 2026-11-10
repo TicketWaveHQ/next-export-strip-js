@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "next-export-strip-js"
+dynamic = ["version"]
+description = "Remove the Next.js runtime from a static export when no page needs JavaScript, and refuse when one does."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "TicketWave HQ Ltd" }]
+keywords = ["nextjs", "static-export", "ssg", "javascript", "web-performance", "react-server-components"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Internet :: WWW/HTTP :: Site Management",
+    "Topic :: Software Development :: Build Tools",
+]
+dependencies = []
+
+[project.scripts]
+next-export-strip-js = "next_export_strip_js:main"
+
+[project.urls]
+Homepage = "https://github.com/TicketWaveHQ/next-export-strip-js"
+Issues = "https://github.com/TicketWaveHQ/next-export-strip-js/issues"
+Changelog = "https://github.com/TicketWaveHQ/next-export-strip-js/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+py-modules = ["next_export_strip_js"]
+
+[tool.setuptools.dynamic]
+version = { attr = "next_export_strip_js.__version__" }

@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+/build/
+/dist/
+
+# Node, for the npm wrapper and the fixture app
+node_modules/
+package-lock.json
+
+# The fixture app's build output. Anchored, because tests/fixtures/*/out is committed.
+/tests/fixture-app/.next/
+/tests/fixture-app/out/
+/tests/fixture-app/next-env.d.ts
+
+.DS_Store

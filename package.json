@@ -1,0 +1,33 @@
+{
+  "name": "next-export-strip-js",
+  "version": "0.1.0",
+  "description": "Remove the Next.js runtime from a static export when no page needs JavaScript, and refuse when one does. Runs the Python tool; needs Python 3.10 or later.",
+  "license": "MIT",
+  "author": "TicketWave HQ Ltd",
+  "homepage": "https://github.com/TicketWaveHQ/next-export-strip-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TicketWaveHQ/next-export-strip-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TicketWaveHQ/next-export-strip-js/issues"
+  },
+  "bin": {
+    "next-export-strip-js": "bin/next-export-strip-js.js"
+  },
+  "files": [
+    "bin/",
+    "next_export_strip_js.py"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "nextjs",
+    "static-export",
+    "ssg",
+    "javascript",
+    "web-performance",
+    "react-server-components"
+  ]
+}

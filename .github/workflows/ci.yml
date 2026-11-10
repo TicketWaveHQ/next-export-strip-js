@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: Tests, Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Unit tests and recorded builds (offline)
+        run: python -m unittest discover -s tests -v
+      - name: Install with pip and run the console script
+        run: |
+          python -m pip install .
+          next-export-strip-js --version
+
+  real-build:
+    name: Real build, Next.js ${{ matrix.next }}${{ matrix.bundler && format(' ({0})', matrix.bundler) || '' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - next: "14.2.35"
+            react: "18.3.1"
+          - next: "15.5.29"
+            react: "19.3.1"
+          - next: "16.4.6"
+            react: "19.3.1"
+          - next: "16.4.6"
+            react: "19.3.1"
+            bundler: webpack
+            build-flags: --webpack
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      NEXT_EXPORT_STRIP_JS_APP: tests/fixture-app
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Install Next.js ${{ matrix.next }}
+        working-directory: tests/fixture-app
+        run: |
+          npm pkg set "dependencies.next=${{ matrix.next }}" "dependencies.react=${{ matrix.react }}" "dependencies.react-dom=${{ matrix.react }}"
+          npm install --no-audit --no-fund
+      - name: Build the fixture app
+        working-directory: tests/fixture-app
+        run: npx next build ${{ matrix.build-flags }}
+      - name: Strip the real export
+        env:
+          NEXT_EXPORT_STRIP_JS_EXPECT: strip
+        run: python -m unittest discover -s tests -p test_live_build.py -v
+      - name: Run through the npm wrapper (dry run)
+        working-directory: tests/fixture-app
+        run: node ../../bin/next-export-strip-js.js out --dry-run
+      - name: Add a client component and build again
+        run: |
+          cp -R tests/fixture-app/variants/interactive/app/. tests/fixture-app/app/
+          cd tests/fixture-app && npx next build ${{ matrix.build-flags }}
+      - name: Refuse the interactive export
+        env:
+          NEXT_EXPORT_STRIP_JS_EXPECT: refuse
+        run: python -m unittest discover -s tests -p test_live_build.py -v
